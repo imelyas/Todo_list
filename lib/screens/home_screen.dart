@@ -17,7 +17,7 @@ class HomeScreen extends StatelessWidget {
           title: const Text(
             'مدیریت کارها',
             style: TextStyle(
-                color: Colors.white, fontWeight: FontWeight.w700, fontSize: 22),
+                color: Colors.white, fontWeight: FontWeight.bold, fontSize: 22),
           ),
           leading: IconButton(
               onPressed: () {},
@@ -156,9 +156,7 @@ class TopPanel extends StatelessWidget {
             ),
             const Spacer(),
             GestureDetector(
-                onTap: () {
-                  // Get.toNamed('/todo_form');
-                },
+                onTap: () => Get.toNamed('/todo_form'),
                 child: Container(
                   width: Get.width * 0.35,
                   height: Get.width * 0.13,

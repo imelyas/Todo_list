@@ -23,6 +23,7 @@ class MyApp extends StatelessWidget {
       theme: ThemeData(
           fontFamily: 'Vazirmatn',
           useMaterial3: true,
+          scaffoldBackgroundColor: Colors.white,
           primaryColor: Constance.primaryColor,
           colorScheme: ColorScheme.fromSeed(seedColor: Constance.primaryColor)),
       debugShowCheckedModeBanner: false,
