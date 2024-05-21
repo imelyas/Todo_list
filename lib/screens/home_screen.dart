@@ -7,33 +7,36 @@ class HomeScreen extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: Constance.primaryColor,
-      appBar: AppBar(
+    return Directionality(
+      textDirection: TextDirection.rtl,
+      child: Scaffold(
         backgroundColor: Constance.primaryColor,
-        centerTitle: true,
-        title: const Text(
-          'مدیریت کارها',
-          style: TextStyle(
-              color: Colors.white, fontWeight: FontWeight.w700, fontSize: 22),
-        ),
-        leading: IconButton(
-            onPressed: () {},
-            icon: const Icon(
-              Icons.filter_list_rounded,
-              color: Colors.white,
-            )),
-        actions: [
-          IconButton(
+        appBar: AppBar(
+          backgroundColor: Constance.primaryColor,
+          centerTitle: true,
+          title: const Text(
+            'مدیریت کارها',
+            style: TextStyle(
+                color: Colors.white, fontWeight: FontWeight.w700, fontSize: 22),
+          ),
+          leading: IconButton(
               onPressed: () {},
               icon: const Icon(
-                Icons.calendar_month_outlined,
+                Icons.filter_list_rounded,
                 color: Colors.white,
               )),
-        ],
-      ),
-      body: const Column(
-        children: [TopPanel(), MainContent()],
+          actions: [
+            IconButton(
+                onPressed: () {},
+                icon: const Icon(
+                  Icons.calendar_month_outlined,
+                  color: Colors.white,
+                )),
+          ],
+        ),
+        body: const Column(
+          children: [TopPanel(), MainContent()],
+        ),
       ),
     );
   }
@@ -153,7 +156,9 @@ class TopPanel extends StatelessWidget {
             ),
             const Spacer(),
             GestureDetector(
-                onTap: () {},
+                onTap: () {
+                  // Get.toNamed('/todo_form');
+                },
                 child: Container(
                   width: Get.width * 0.35,
                   height: Get.width * 0.13,
