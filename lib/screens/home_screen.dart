@@ -17,6 +17,20 @@ class HomeScreen extends StatelessWidget {
           style: TextStyle(
               color: Colors.white, fontWeight: FontWeight.w700, fontSize: 22),
         ),
+        leading: IconButton(
+            onPressed: () {},
+            icon: const Icon(
+              Icons.filter_list_rounded,
+              color: Colors.white,
+            )),
+        actions: [
+          IconButton(
+              onPressed: () {},
+              icon: const Icon(
+                Icons.calendar_month_outlined,
+                color: Colors.white,
+              )),
+        ],
       ),
       body: const Column(
         children: [TopPanel(), MainContent()],
