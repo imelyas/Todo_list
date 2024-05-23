@@ -3,6 +3,8 @@ import 'package:get/get.dart';
 import 'package:todo_list/utils/constanse.dart';
 
 class TodoFormScreen extends StatelessWidget {
+  static TextEditingController titleController = TextEditingController();
+  static TextEditingController descController = TextEditingController();
   static bool isAdd = true;
   const TodoFormScreen({super.key});
 
@@ -36,14 +38,16 @@ class TodoFormScreen extends StatelessWidget {
               child: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
-                  const MyTextField(
+                  MyTextField(
                     label: 'عنوان کار',
+                    controller: titleController,
                   ),
                   SizedBox(
                     height: Get.height * 0.02,
                   ),
-                  const MyTextField(
+                  MyTextField(
                     label: 'توضیحات کار',
+                    controller: descController,
                     lines: 5,
                   ),
                   SizedBox(
@@ -65,47 +69,72 @@ class TodoFormScreen extends StatelessWidget {
                                   TextStyle(color: Colors.white, fontSize: 18),
                             )),
                           ))
-                      : Row(
+                      : Column(
+                          mainAxisSize: MainAxisSize.min,
                           children: [
-                            Expanded(
-                              child: GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        color: Constance.primaryColor,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: const Center(
-                                        child: Text(
-                                      'ویرایش',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
-                                    )),
+                            GestureDetector(
+                                onTap: () {},
+                                child: Container(
+                                  width: double.infinity,
+                                  height: 50,
+                                  decoration: BoxDecoration(
+                                      color: Colors.green[700],
+                                      borderRadius: BorderRadius.circular(10)),
+                                  child: const Center(
+                                      child: Text(
+                                    'انجام شده',
+                                    style: TextStyle(
+                                        color: Colors.white, fontSize: 18),
                                   )),
+                                )),
+                            const SizedBox(
+                              height: 16,
                             ),
-                            SizedBox(
-                              width: Get.width * 0.05,
+                            Row(
+                              children: [
+                                Expanded(
+                                  child: GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            color: Constance.primaryColor,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: const Center(
+                                            child: Text(
+                                          'ویرایش',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18),
+                                        )),
+                                      )),
+                                ),
+                                SizedBox(
+                                  width: Get.width * 0.05,
+                                ),
+                                Expanded(
+                                  child: GestureDetector(
+                                      onTap: () {},
+                                      child: Container(
+                                        width: double.infinity,
+                                        height: 50,
+                                        decoration: BoxDecoration(
+                                            color: Colors.redAccent,
+                                            borderRadius:
+                                                BorderRadius.circular(10)),
+                                        child: const Center(
+                                            child: Text(
+                                          'حذف',
+                                          style: TextStyle(
+                                              color: Colors.white,
+                                              fontSize: 18),
+                                        )),
+                                      )),
+                                )
+                              ],
                             ),
-                            Expanded(
-                              child: GestureDetector(
-                                  onTap: () {},
-                                  child: Container(
-                                    width: double.infinity,
-                                    height: 50,
-                                    decoration: BoxDecoration(
-                                        color: Colors.redAccent,
-                                        borderRadius:
-                                            BorderRadius.circular(10)),
-                                    child: const Center(
-                                        child: Text(
-                                      'حذف',
-                                      style: TextStyle(
-                                          color: Colors.white, fontSize: 18),
-                                    )),
-                                  )),
-                            )
                           ],
                         )
                 ],
@@ -121,11 +150,17 @@ class TodoFormScreen extends StatelessWidget {
 class MyTextField extends StatelessWidget {
   final String label;
   final int lines;
-  const MyTextField({super.key, required this.label, this.lines = 1});
+  final TextEditingController controller;
+  const MyTextField(
+      {super.key,
+      required this.label,
+      this.lines = 1,
+      required this.controller});
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: controller,
       cursorColor: Colors.black54,
       maxLines: lines,
       decoration: InputDecoration(

@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_list/screens/todo_form_screen.dart';
 import 'package:todo_list/utils/constanse.dart';
 
 class HomeScreen extends StatelessWidget {
@@ -60,60 +61,78 @@ class MainContent extends StatelessWidget {
         child: ListView.builder(
             itemCount: 10,
             itemBuilder: (context, index) {
-              return Card(
-                color: Colors.white,
+              return const TodoCard();
+            }),
+      ),
+    ));
+  }
+}
+
+class TodoCard extends StatelessWidget {
+  const TodoCard({
+    super.key,
+  });
+
+  @override
+  Widget build(BuildContext context) {
+    return GestureDetector(
+      onTap: () {
+        TodoFormScreen.isAdd = false;
+        TodoFormScreen.titleController.text = 'sss';
+        TodoFormScreen.descController.text = 'sss';
+        Get.toNamed('/todo_form');
+      },
+      child: Card(
+        color: Colors.white,
+        child: Padding(
+          padding: const EdgeInsets.all(20),
+          child: Row(
+            children: [
+              Image.asset(
+                10 % 3 == 0
+                    ? 'assets/images/undone.png'
+                    : 'assets/images/done.png',
+                width: Get.width * 0.08,
+                height: Get.width * 0.08,
+              ),
+              const Expanded(
                 child: Padding(
-                  padding: const EdgeInsets.all(20),
-                  child: Row(
+                  padding: EdgeInsets.only(right: 16, left: 16),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Image.asset(
-                        index % 3 == 0
-                            ? 'assets/images/undone.png'
-                            : 'assets/images/done.png',
-                        width: Get.width * 0.08,
-                        height: Get.width * 0.08,
+                      Text(
+                        'عنوان کار',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      const Expanded(
-                        child: Padding(
-                          padding: EdgeInsets.only(right: 16, left: 16),
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Text(
-                                'عنوان کار',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(fontWeight: FontWeight.bold),
-                              ),
-                              SizedBox(
-                                height: 4,
-                              ),
-                              Text(
-                                'توضیحات مربوط به کار توضیحات مربوط به کار توضیحات مربوط به کار توضیحات مربوط به کار',
-                                maxLines: 1,
-                                overflow: TextOverflow.ellipsis,
-                                style: TextStyle(
-                                    fontWeight: FontWeight.w200,
-                                    color: Colors.grey),
-                              )
-                            ],
-                          ),
-                        ),
+                      SizedBox(
+                        height: 4,
                       ),
-                      const RotatedBox(
-                        quarterTurns: 3,
-                        child: Text(
-                          '1403/02/31',
-                          style: TextStyle(fontSize: 10, color: Colors.grey),
-                        ),
+                      Text(
+                        'توضیحات مربوط به کار توضیحات مربوط به کار توضیحات مربوط به کار توضیحات مربوط به کار',
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: TextStyle(
+                            fontWeight: FontWeight.w200, color: Colors.grey),
                       )
                     ],
                   ),
                 ),
-              );
-            }),
+              ),
+              const RotatedBox(
+                quarterTurns: 3,
+                child: Text(
+                  '1403/02/31',
+                  style: TextStyle(fontSize: 10, color: Colors.grey),
+                ),
+              )
+            ],
+          ),
+        ),
       ),
-    ));
+    );
   }
 }
 
@@ -156,7 +175,12 @@ class TopPanel extends StatelessWidget {
             ),
             const Spacer(),
             GestureDetector(
-                onTap: () => Get.toNamed('/todo_form'),
+                onTap: () {
+                  TodoFormScreen.isAdd = true;
+                  TodoFormScreen.titleController.clear();
+                  TodoFormScreen.descController.clear();
+                  Get.toNamed('/todo_form');
+                },
                 child: Container(
                   width: Get.width * 0.35,
                   height: Get.width * 0.13,
