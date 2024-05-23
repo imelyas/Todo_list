@@ -1,15 +1,20 @@
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_list/controller/api/todo_controller.dart';
 import 'package:todo_list/utils/constanse.dart';
+import 'package:todo_list/utils/utils.dart';
 
 class TodoFormScreen extends StatelessWidget {
+  static String id = '';
   static TextEditingController titleController = TextEditingController();
   static TextEditingController descController = TextEditingController();
   static bool isAdd = true;
+  static bool status = false;
   const TodoFormScreen({super.key});
 
   @override
   Widget build(BuildContext context) {
+    var todoController = Get.find<TodoController>();
     return Directionality(
       textDirection: TextDirection.rtl,
       child: Scaffold(
@@ -55,7 +60,19 @@ class TodoFormScreen extends StatelessWidget {
                   ),
                   isAdd
                       ? GestureDetector(
-                          onTap: () {},
+                          onTap: () {
+                            if (titleController.text.isEmpty ||
+                                descController.text.isEmpty) {
+                              emptySnakbar();
+                            } else {
+                              todoController.addTodo({
+                                'title': titleController.text,
+                                'desc': descController.text,
+                                'created_at': '1403/03/03',
+                              });
+                              Get.back();
+                            }
+                          },
                           child: Container(
                             width: double.infinity,
                             height: 50,
@@ -69,42 +86,24 @@ class TodoFormScreen extends StatelessWidget {
                                   TextStyle(color: Colors.white, fontSize: 18),
                             )),
                           ))
-                      : Column(
-                          mainAxisSize: MainAxisSize.min,
-                          children: [
-                            GestureDetector(
-                                onTap: () {},
-                                child: Container(
-                                  width: double.infinity,
-                                  height: 50,
-                                  decoration: BoxDecoration(
-                                      color: Colors.green[700],
-                                      borderRadius: BorderRadius.circular(10)),
-                                  child: const Center(
-                                      child: Text(
-                                    'انجام شده',
-                                    style: TextStyle(
-                                        color: Colors.white, fontSize: 18),
-                                  )),
-                                )),
-                            const SizedBox(
-                              height: 16,
-                            ),
-                            Row(
+                      : status
+                          ? Row(
                               children: [
                                 Expanded(
                                   child: GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        Get.back();
+                                      },
                                       child: Container(
                                         width: double.infinity,
                                         height: 50,
                                         decoration: BoxDecoration(
-                                            color: Constance.primaryColor,
+                                            color: Colors.grey,
                                             borderRadius:
                                                 BorderRadius.circular(10)),
                                         child: const Center(
                                             child: Text(
-                                          'ویرایش',
+                                          'بازگشت',
                                           style: TextStyle(
                                               color: Colors.white,
                                               fontSize: 18),
@@ -116,7 +115,13 @@ class TodoFormScreen extends StatelessWidget {
                                 ),
                                 Expanded(
                                   child: GestureDetector(
-                                      onTap: () {},
+                                      onTap: () {
+                                        deleteConfirmDialog(() {
+                                          todoController.deleteTodo(id);
+                                          Get.back();
+                                          Get.back();
+                                        });
+                                      },
                                       child: Container(
                                         width: double.infinity,
                                         height: 50,
@@ -134,9 +139,99 @@ class TodoFormScreen extends StatelessWidget {
                                       )),
                                 )
                               ],
-                            ),
-                          ],
-                        )
+                            )
+                          : Column(
+                              mainAxisSize: MainAxisSize.min,
+                              children: [
+                                GestureDetector(
+                                    onTap: () {
+                                      doneConfirmDialog(() {
+                                        todoController.doneTodo(id);
+                                        Get.back();
+                                        Get.back();
+                                      });
+                                    },
+                                    child: Container(
+                                      width: double.infinity,
+                                      height: 50,
+                                      decoration: BoxDecoration(
+                                          color: Colors.green[700],
+                                          borderRadius:
+                                              BorderRadius.circular(10)),
+                                      child: const Center(
+                                          child: Text(
+                                        'تغییر به انجام شده',
+                                        style: TextStyle(
+                                            color: Colors.white, fontSize: 18),
+                                      )),
+                                    )),
+                                const SizedBox(
+                                  height: 16,
+                                ),
+                                Row(
+                                  children: [
+                                    Expanded(
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            if (titleController.text.isEmpty ||
+                                                descController.text.isEmpty) {
+                                              emptySnakbar();
+                                            } else {
+                                              todoController.editTodo(id, {
+                                                'title': titleController.text,
+                                                'desc': descController.text,
+                                              });
+                                              Get.back();
+                                            }
+                                          },
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                                color: Constance.primaryColor,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: const Center(
+                                                child: Text(
+                                              'ویرایش',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            )),
+                                          )),
+                                    ),
+                                    SizedBox(
+                                      width: Get.width * 0.05,
+                                    ),
+                                    Expanded(
+                                      child: GestureDetector(
+                                          onTap: () {
+                                            deleteConfirmDialog(() {
+                                              todoController.deleteTodo(id);
+                                              Get.back();
+                                              Get.back();
+                                            });
+                                          },
+                                          child: Container(
+                                            width: double.infinity,
+                                            height: 50,
+                                            decoration: BoxDecoration(
+                                                color: Colors.redAccent,
+                                                borderRadius:
+                                                    BorderRadius.circular(10)),
+                                            child: const Center(
+                                                child: Text(
+                                              'حذف',
+                                              style: TextStyle(
+                                                  color: Colors.white,
+                                                  fontSize: 18),
+                                            )),
+                                          )),
+                                    )
+                                  ],
+                                ),
+                              ],
+                            )
                 ],
               ),
             ),
