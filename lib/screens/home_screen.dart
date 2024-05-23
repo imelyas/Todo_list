@@ -1,5 +1,9 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_list/controller/api/todo_controller.dart';
+import 'package:todo_list/models/todo_model.dart';
 import 'package:todo_list/screens/todo_form_screen.dart';
 import 'package:todo_list/utils/constanse.dart';
 
@@ -58,19 +62,37 @@ class MainContent extends StatelessWidget {
               BorderRadius.only(topLeft: Radius.circular(Get.width * 0.15))),
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 20, horizontal: 20),
-        child: ListView.builder(
-            itemCount: 10,
-            itemBuilder: (context, index) {
-              return const TodoCard();
-            }),
+        child: Obx(() {
+          var todoController = Get.find<TodoController>();
+          if (todoController.isLoading.value) {
+            return const Center(child: CircularProgressIndicator());
+          } else {
+            if (todoController.todoList.isEmpty) {
+              return const Center(
+                child: Icon(Icons.error_outline_rounded),
+              );
+            } else {
+              return ListView.builder(
+                  itemCount: todoController.todoList.length,
+                  itemBuilder: (context, index) {
+                    var todo = todoController.todoList.reversed.toList()[index];
+                    return TodoCard(
+                      todo: todo,
+                    );
+                  });
+            }
+          }
+        }),
       ),
     ));
   }
 }
 
 class TodoCard extends StatelessWidget {
+  final Todo todo;
   const TodoCard({
     super.key,
+    required this.todo,
   });
 
   @override
@@ -78,8 +100,12 @@ class TodoCard extends StatelessWidget {
     return GestureDetector(
       onTap: () {
         TodoFormScreen.isAdd = false;
-        TodoFormScreen.titleController.text = 'sss';
-        TodoFormScreen.descController.text = 'sss';
+        TodoFormScreen.titleController.text =
+            utf8.decode(todo.title.runes.toList());
+        TodoFormScreen.descController.text =
+            utf8.decode(todo.desc.runes.toList());
+        TodoFormScreen.id = todo.id;
+        TodoFormScreen.status = todo.status;
         Get.toNamed('/todo_form');
       },
       child: Card(
@@ -89,43 +115,43 @@ class TodoCard extends StatelessWidget {
           child: Row(
             children: [
               Image.asset(
-                9 % 3 == 0
-                    ? 'assets/images/undone.png'
-                    : 'assets/images/done.png',
+                todo.status
+                    ? 'assets/images/done.png'
+                    : 'assets/images/undone.png',
                 width: Get.width * 0.08,
                 height: Get.width * 0.08,
               ),
-              const Expanded(
+              Expanded(
                 child: Padding(
-                  padding: EdgeInsets.only(right: 16, left: 16),
+                  padding: const EdgeInsets.only(right: 16, left: 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(
-                        'عنوان کار',
+                        utf8.decode(todo.title.runes.toList()),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(fontWeight: FontWeight.bold),
+                        style: const TextStyle(fontWeight: FontWeight.bold),
                       ),
-                      SizedBox(
+                      const SizedBox(
                         height: 4,
                       ),
                       Text(
-                        'توضیحات مربوط به کار توضیحات مربوط به کار توضیحات مربوط به کار توضیحات مربوط به کار',
+                        utf8.decode(todo.desc.runes.toList()),
                         maxLines: 1,
                         overflow: TextOverflow.ellipsis,
-                        style: TextStyle(
+                        style: const TextStyle(
                             fontWeight: FontWeight.w200, color: Colors.grey),
                       )
                     ],
                   ),
                 ),
               ),
-              const RotatedBox(
+              RotatedBox(
                 quarterTurns: 3,
                 child: Text(
-                  '1403/02/31',
-                  style: TextStyle(fontSize: 10, color: Colors.grey),
+                  todo.createdAt,
+                  style: const TextStyle(fontSize: 10, color: Colors.grey),
                 ),
               )
             ],
@@ -153,24 +179,36 @@ class TopPanel extends StatelessWidget {
         padding: EdgeInsets.symmetric(horizontal: Get.width * 0.1),
         child: Row(
           children: [
-            const Column(
+            Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
-                Text(
+                const Text(
                   'کل کارها',
                   style: TextStyle(
                       color: Colors.white,
                       fontWeight: FontWeight.w700,
                       fontSize: 18),
                 ),
-                Text(
-                  '10 کار',
-                  style: TextStyle(
-                      color: Colors.white54,
-                      fontWeight: FontWeight.w400,
-                      fontSize: 12),
-                ),
+                Obx(() {
+                  if (Get.find<TodoController>().isLoading.value) {
+                    return const SizedBox(
+                      width: 8,
+                      height: 8,
+                      child: CircularProgressIndicator(
+                        color: Colors.white,
+                        strokeWidth: 1,
+                      ),
+                    );
+                  }
+                  return Text(
+                    '${Get.find<TodoController>().todoList.length} کار',
+                    style: const TextStyle(
+                        color: Colors.white54,
+                        fontWeight: FontWeight.w400,
+                        fontSize: 12),
+                  );
+                }),
               ],
             ),
             const Spacer(),
@@ -195,7 +233,10 @@ class TopPanel extends StatelessWidget {
                         color: Constance.primaryColor,
                       ),
                       Text(
-                        'کار جدید', style: TextStyle( color: Constance.primaryColor, fontWeight: FontWeight.bold,
+                        'کار جدید',
+                        style: TextStyle(
+                            color: Constance.primaryColor,
+                            fontWeight: FontWeight.bold,
                             fontSize: 16),
                       ),
                     ],
