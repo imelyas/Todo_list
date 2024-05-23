@@ -89,7 +89,7 @@ class TodoCard extends StatelessWidget {
           child: Row(
             children: [
               Image.asset(
-                10 % 3 == 0
+                9 % 3 == 0
                     ? 'assets/images/undone.png'
                     : 'assets/images/done.png',
                 width: Get.width * 0.08,
@@ -195,10 +195,7 @@ class TopPanel extends StatelessWidget {
                         color: Constance.primaryColor,
                       ),
                       Text(
-                        'کار جدید',
-                        style: TextStyle(
-                            color: Constance.primaryColor,
-                            fontWeight: FontWeight.bold,
+                        'کار جدید', style: TextStyle( color: Constance.primaryColor, fontWeight: FontWeight.bold,
                             fontSize: 16),
                       ),
                     ],
