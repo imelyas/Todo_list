@@ -1,7 +1,6 @@
-import 'dart:ui';
-
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:todo_list/bindings/bindings.dart';
 import 'package:todo_list/screens/home_screen.dart';
 import 'package:todo_list/utils/constanse.dart';
 import 'package:todo_list/utils/routes.dart';
@@ -20,6 +19,7 @@ class MyApp extends StatelessWidget {
       title: 'Flutter Demo',
       getPages: Routes.routes,
       initialRoute: '/home',
+      initialBinding: MyBindings(),
       theme: ThemeData(
           fontFamily: 'Vazirmatn',
           useMaterial3: true,
